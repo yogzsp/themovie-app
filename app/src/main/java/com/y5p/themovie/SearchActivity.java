@@ -4,8 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +25,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,8 +42,12 @@ public class SearchActivity extends AppCompatActivity {
     private MovieApi movieApi;
 
     private TextInputLayout cariBox;
-    private EditText inputCariFilm;
+    private ScrollView listFilm;
+    private ImageView buttonSearch;
+    private AutoCompleteTextView inputCariFilm;
     private List<Movie> originalMovieList;
+
+    private SearchHistoryManager searchHistoryManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,27 +105,71 @@ public class SearchActivity extends AppCompatActivity {
         // Tambahkan listener untuk TextInputLayout atau EditText
         cariBox = findViewById(R.id.cariBox);
         inputCariFilm = findViewById(R.id.inputCariFilm);
+        listFilm = findViewById(R.id.menuFilm);
+        buttonSearch = findViewById(R.id.buttonSearch);
+        searchHistoryManager = new SearchHistoryManager(this);
+// ...
+
+        inputCariFilm.setOnItemClickListener((adapterView, view, position, id) -> {
+            // Lakukan sesuatu dengan item yang dipilih
+            Toast.makeText(SearchActivity.this, "Selected: ", Toast.LENGTH_SHORT).show();
+        });
+
+
+
+        inputCariFilm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSearchHistoryDropdown();
+            }
+        });
 
         inputCariFilm.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                String query = inputCariFilm.getText().toString();
-//                System.out.println(query);
-//                fetchData(query);
+
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String query = inputCariFilm.getText().toString();
-                System.out.println(query);
-                fetchData(query);
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                if(inputCariFilm.getText().toString().length() < 3) {
+                    showSearchHistoryDropdown();
+                }
             }
         });
+
+        inputCariFilm.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    saveHistory(inputCariFilm.getText().toString().trim());
+                    String query = inputCariFilm.getText().toString();
+                    System.out.println(query);
+                    fetchData(query);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        buttonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(inputCariFilm.getText().toString().length() >= 3) {
+                    saveHistory(inputCariFilm.getText().toString().trim());
+                    String query = inputCariFilm.getText().toString();
+                    System.out.println(query);
+                    fetchData(query);
+                }
+            }
+        });
+
     }
 
 
@@ -173,4 +232,25 @@ public class SearchActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void saveHistory(String dataHistory){
+        System.out.println("berhasil save");
+        searchHistoryManager.saveSearchHistory(dataHistory);
+    }
+
+    private void showSearchHistoryDropdown() {
+        List<String> searchHistoryList = searchHistoryManager.getSearchHistory();
+        Collections.reverse(searchHistoryList); // Balik urutan list
+
+        // Buat adapter untuk AutoCompleteTextView
+        ArrayAdapter<String> historyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, searchHistoryList);
+
+        // Set adapter pada AutoCompleteTextView
+        inputCariFilm.setAdapter(historyAdapter);
+
+        // Tampilkan dropdown
+        inputCariFilm.showDropDown();
+    }
+
+
 }

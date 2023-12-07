@@ -56,18 +56,19 @@
             android:paddingRight="20dp">
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/cariBox"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:background="@color/white"
                 app:boxStrokeColor="#fff"
                 app:boxStrokeWidth="0dp"
                 app:counterMaxLength="10"
-                app:startIconDrawable="@drawable/ic_search"
                 app:hintEnabled="false"
                 app:hintTextColor="@color/dark_white_color">
 
-                <EditText
+                <AutoCompleteTextView
+                    android:inputType="textAutoComplete"
                     android:id="@+id/inputCariFilm"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -75,21 +76,44 @@
                     android:ems="10"
                     android:hint="Masukan judul film"
                     android:textColor="@color/dark_white_color"
-                    android:inputType="text"
                     android:padding="2dp"
                     android:paddingStart="10dp"
                     android:textCursorDrawable="@drawable/cursor"
                     android:textSize="15sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
+            <ImageView
+                android:id="@+id/buttonSearch"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:src="@drawable/ic_search"
+                android:background="@color/white"
+                android:layout_marginStart="10dp"/>
         </LinearLayout>
     </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomNavigationView"
+        android:layout_below="@+id/headerBar"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never" />
+
+    </ScrollView>
     <!--List Menu-->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottomNavigationView"
         android:layout_below="@+id/headerBar"
+        android:id="@+id/menuFilm"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp">
 
@@ -106,7 +130,7 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:itemTextColor="@drawable/selector"
+        app:itemTextColor="@color/dark_white_color"
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_navigation" />
 </RelativeLayout>
