@@ -46,6 +46,7 @@ public class DetailActivity extends AppCompatActivity {
         title = intent.getStringExtra("title");
         description = intent.getStringExtra("description");
         String gambar = intent.getStringExtra("gambar");
+        String poster = intent.getStringExtra("poster");
         int idMovie = intent.getIntExtra("idFilm", -1);
 
         System.out.println("id filmnya : " + idMovie);
@@ -61,6 +62,7 @@ public class DetailActivity extends AppCompatActivity {
         descriptionTextView.setText(description);
         tanggalView.setText(tanggal);
         Picasso.get().load(gambar).into(gambarView);
+        System.out.println("ini posternya : "+poster);
 
         boolean isFavorite = FavoriteID.isFavoriteMovieIdExist(this, idMovie);
         if (isFavorite) {
@@ -74,7 +76,7 @@ public class DetailActivity extends AppCompatActivity {
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new ShareTask().execute(gambar);
+                new ShareTask().execute(poster);
             }
         });
 
@@ -142,7 +144,7 @@ public class DetailActivity extends AppCompatActivity {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("image/*");
             shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-            shareIntent.putExtra(Intent.EXTRA_TEXT, "Hi aku mengajakmu nonton Film " + title + " yang rilis pada tanggal " + tanggal);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Film : " + title + "\nTanggal Rilis : " + tanggal + "\n\n"+description);
 
             startActivity(Intent.createChooser(shareIntent, "Bagikan ke:"));
         } catch (Exception e) {
