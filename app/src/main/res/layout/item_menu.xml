@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:paddingBottom="10dp"
+        android:orientation="horizontal">
+
+        <!-- Gambar -->
+        <ImageView
+            android:id="@+id/gambarFilm"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/gambar"
+            android:scaleType="centerCrop" />
+
+        <!-- Deskripsi -->
+        <LinearLayout
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/namaFilm"
+                android:layout_width="match_parent"
+                android:layout_height="21dp"
+                android:textColor="@color/black"
+                android:gravity="center_vertical"
+                android:text="Avatar"
+                android:maxLines="2"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppinsregular"
+                android:textFontWeight="700" />
+
+            <!-- Deskripsi -->
+            <TextView
+                android:id="@+id/descFilm"
+                android:justificationMode="inter_word"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="4"
+                android:fontFamily="@font/poppinsregular"
+                android:textColor="@color/black"
+                android:text="Filmnya mantap pokoknya bagus sudah begitu deh wakjkdsjkd" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
